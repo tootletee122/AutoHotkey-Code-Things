@@ -1,4 +1,4 @@
-﻿; Initialization and Environment Setup
+; Initialization and Environment Setup
 #NoEnv
 #MaxHotkeysPerInterval 127
 SendMode Input
@@ -39,6 +39,7 @@ FovSense := 0.15
 TriggerSense := 5.75
 Smoothing := 4.75
 OSDEnabled := 1
+TrueColorAimbotEnabled := 0
 
 ; Movement Options
 MovementOptions := ["None", "Jump Only", "Crouch Only", "Jump & Crouch", "Strafe Left", "Strafe Right", "Forward", "Backward", "Circle Left", "Circle Right", "Diagonal Forward Left", "Diagonal Forward Right", "Diagonal Backward Left", "Diagonal Backward Right", "Random Jump", "Random Crouch", "Step Left", "Step Right", "Step Forward", "Step Backward", "Rotate Left", "Rotate Right", "Rotate Up", "Rotate Down"]
@@ -46,7 +47,7 @@ SelectedMovementOption := "None"
 
 ; Aiming Styles
 AimingStyles := ["Standard", "Smooth", "Fast", "Precise", "Aggressive", "Random", "Predictive", "Sniper", "Spray", "Burst", "Steady", "Recoil Control", "Tracking", "Micro Adjustment", "Macro Adjustment", "Gradual", "Sudden", "Wave", "Zigzag", "Jitter", "Spiral", "Random Precise", "Random Aggressive", "Counter Recoil", "Drag Shot", "Hit Scan", "Sharp Shooter", "Rapid Fire", "Slow Fire", "Auto Aim"]
-SelectedAimingStyle := "Aggressive"
+SelectedAimingStyle := "Gradual"
 
 ; GUI Theme Variables
 GuiThemes := {}
@@ -132,27 +133,28 @@ Gui, Add, Checkbox, x140 y80 w300 vTriggerbot, Triggerbot
 Gui, Add, Checkbox, x140 y110 w300 gToggleOSD vOSDEnabled Checked, Enable OSD
 Gui, Add, Checkbox, x140 y140 w300 gToggleBHop vBHop, BHop (45ms)
 Gui, Add, Checkbox, x140 y170 w300 gDualAimbot vDualAimbot, Dual Aimbot
-Gui, Add, Button, x140 y200 w300 gCreds, CREDITS
+Gui, Add, Checkbox, x140 y200 w300 gToggleTrueColorAimbot vTrueColorAimbot, True Color Aimbot
+Gui, Add, Button, x140 y230 w300 gCreds, CREDITS
 
 ; Themes Tab
 Gui, Tab, Themes
 Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Theme:
-Gui, Add, Text, x200 y20 w170 cYellow, Deafult is EngineOwning
+Gui, Add, Text, x200 y20 w170 cYellow, Default is EngineOwning
 Gui, Add, DropDownList, x240 y50 w100 vThemeDropDown gApplyTheme, % "Dark|Light|Blue|Red|Green|Yellow|Purple|Orange|Pink|Teal|Lime|Cyan|Magenta|Silver|Maroon|Olive|Navy|Gold|Brown|Coral|Khaki|Lavender|Mint|Peach|Salmon|Sky Blue|Slate|Tan|Turquoise|Violet|Wheat|EngineOwning"
 
 ; Movement Tab
 Gui, Tab, Movement
 Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Movement:
-Gui, Add, Text, x200 y20 w170 cYellow, Deafult is None
+Gui, Add, Text, x200 y20 w170 cYellow, Default is None
 Gui, Add, DropDownList, x240 y50 w150 vMovementOption gApplyMovementOption, % "None|Jump Only|Crouch Only|Jump & Crouch|Strafe Left|Strafe Right|Forward|Backward|Circle Left|Circle Right|Diagonal Forward Left|Diagonal Forward Right|Diagonal Backward Left|Diagonal Backward Right|Random Jump|Random Crouch|Step Left|Step Right|Step Forward|Step Backward|Rotate Left|Rotate Right|Rotate Up|Rotate Down"
 
 ; Aimbot Tab
 Gui, Tab, Aimbot
 Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Aiming Style:
-Gui, Add, Text, x200 y20 w170 cYellow, Deafult is Aggressive
+Gui, Add, Text, x200 y20 w170 cYellow, Default is Gradual
 Gui, Add, DropDownList, x240 y50 w150 vAimingStyle gApplyAimingStyle, % "Standard|Smooth|Fast|Precise|Aggressive|Random|Predictive|Sniper|Spray|Burst|Steady|Recoil Control|Tracking|Micro Adjustment|Macro Adjustment|Gradual|Sudden|Wave|Zigzag|Jitter|Spiral|Random Precise|Random Aggressive|Counter Recoil|Drag Shot|Hit Scan|Sharp Shooter|Rapid Fire|Slow Fire|Auto Aim"
 
 ; Main Gui Section
@@ -188,137 +190,142 @@ While GetKeyState(AimbotHotkey, "P") {
     searchAreaHalf := searchArea / 2
     PixelSearch, TargetX, TargetY, MidX-searchAreaHalf, MidY-searchAreaHalf, MidX+searchAreaHalf, MidY+searchAreaHalf, aim1, variation, Fast RGB
     If (ErrorLevel = 0) {
-        distance := Sqrt((TargetX - MidX)**2 + (TargetY - MidY)**2)
-        
-        ; Dynamic Sensitivity Calculation
-        if (distance < 50) {
-            dynamicSense := 0.75
-        } else if (distance < 100) {
-            dynamicSense := 0.55
+        if (TrueColorAimbotEnabled) {
+            ; Directly move to the target without sensitivity adjustments
+            MoveX := TargetX - MidX
+            MoveY := TargetY - MidY
+            DllCall("mouse_event", UInt, 1, Int, MoveX, Int, MoveY, UInt, 0, UInt, 0)
         } else {
-            dynamicSense := Sense
-        }
+            distance := Sqrt((TargetX - MidX)**2 + (TargetY - MidY)**2)
+            ; Dynamic Sensitivity Calculation
+            if (distance < 50) {
+                dynamicSense := 0.75
+            } else if (distance < 100) {
+                dynamicSense := 0.55
+            } else {
+                dynamicSense := Sense
+            }
+            MoveX := (TargetX - MidX) / dynamicSense
+            MoveY := (TargetY - MidY) / dynamicSense
 
-        MoveX := (TargetX - MidX) / dynamicSense
-        MoveY := (TargetY - MidY) / dynamicSense
-        
-        ; Apply aiming style
-        if (SelectedAimingStyle = "Standard") {
-            ; Do nothing, use default values
-        } else if (SelectedAimingStyle = "Smooth") {
-            MoveX := MoveX / 2
-            MoveY := MoveY / 2
-        } else if (SelectedAimingStyle = "Fast") {
-            MoveX := MoveX * 2
-            MoveY := MoveY * 2
-        } else if (SelectedAimingStyle = "Precise") {
-            MoveX := MoveX / 3
-            MoveY := MoveY / 3
-        } else if (SelectedAimingStyle = "Aggressive") {
-            MoveX := MoveX * 1.5
-            MoveY := MoveY * 1.5
-        } else if (SelectedAimingStyle = "Random") {
-            Random, randX, -5, 5
-            Random, randY, -5, 5
-            MoveX := MoveX + randX
-            MoveY := MoveY + randY
-        } else if (SelectedAimingStyle = "Predictive") {
-            ; Predictive logic can be more complex, for now using a simple multiplier
-            MoveX := MoveX * 0.9
-            MoveY := MoveY * 0.9
-        } else if (SelectedAimingStyle = "Sniper") {
-            MoveX := MoveX / 5
-            MoveY := MoveY / 5
-        } else if (SelectedAimingStyle = "Spray") {
-            Random, sprayX, -10, 10
-            Random, sprayY, -10, 10
-            MoveX := MoveX + sprayX
-            MoveY := MoveY + sprayY
-        } else if (SelectedAimingStyle = "Burst") {
-            Random, burstX, -3, 3
-            Random, burstY, -3, 3
-            MoveX := MoveX + burstX
-            MoveY := MoveY + burstY
-        } else if (SelectedAimingStyle = "Steady") {
-            MoveX := MoveX * 0.8
-            MoveY := MoveY * 0.8
-        } else if (SelectedAimingStyle = "Recoil Control") {
-            MoveX := MoveX / 4
-            MoveY := MoveY / 4
-        } else if (SelectedAimingStyle = "Tracking") {
-            ; Tracking logic can be added here
-            MoveX := MoveX
-            MoveY := MoveY
-        } else if (SelectedAimingStyle = "Micro Adjustment") {
-            MoveX := MoveX / 10
-            MoveY := MoveY / 10
-        } else if (SelectedAimingStyle = "Macro Adjustment") {
-            MoveX := MoveX * 5
-            MoveY := MoveY * 5
-        } else if (SelectedAimingStyle = "Gradual") {
-            MoveX := MoveX * 0.7
-            MoveY := MoveY * 0.7
-        } else if (SelectedAimingStyle = "Sudden") {
-            MoveX := MoveX * 3
-            MoveY := MoveY * 3
-        } else if (SelectedAimingStyle = "Wave") {
-            ; Wave pattern logic
-            MoveX := MoveX + Sin(A_TickCount / 10) * 5
-            MoveY := MoveY + Cos(A_TickCount / 10) * 5
-        } else if (SelectedAimingStyle = "Zigzag") {
-            ; Zigzag pattern logic
-            MoveX := MoveX + ((A_TickCount // 20) + 2 = 0 ? 10 : -10)
-            MoveY := MoveY + ((A_TickCount // 20) + 2 = 0 ? -10 : 10)
-        } else if (SelectedAimingStyle = "Jitter") {
-            ; Jitter pattern logic
-            Random, jitterX, -10, 10
-            Random, jitterY, -10, 10
-            MoveX := MoveX + jitterX
-            MoveY := MoveY + jitterY
-        } else if (SelectedAimingStyle = "Spiral") {
-            ; Spiral pattern logic
-            MoveX := MoveX + Sin(A_TickCount / 10) * 10
-            MoveY := MoveY + Cos(A_TickCount / 10) * 10
-        } else if (SelectedAimingStyle = "Random Precise") {
-            Random, randX, -1, 1
-            Random, randY, -1, 1
-            MoveX := MoveX + randX
-            MoveY := MoveY + randY
-        } else if (SelectedAimingStyle = "Random Aggressive") {
-            Random, randX, -15, 15
-            Random, randY, -15, 15
-            MoveX := MoveX + randX
-            MoveY := MoveY + randY
-        } else if (SelectedAimingStyle = "Counter Recoil") {
-            ; Counter recoil logic
-            MoveX := MoveX - Sin(A_TickCount / 10) * 5
-            MoveY := MoveY - Cos(A_TickCount / 10) * 5
-        } else if (SelectedAimingStyle = "Drag Shot") {
-            MoveX := MoveX * 1.2
-            MoveY := MoveY * 1.2
-        } else if (SelectedAimingStyle = "Hit Scan") {
-            MoveX := MoveX * 0.5
-            MoveY := MoveY * 0.5
-        } else if (SelectedAimingStyle = "Sharp Shooter") {
-            MoveX := MoveX * 2.5
-            MoveY := MoveY * 2.5
-        } else if (SelectedAimingStyle = "Rapid Fire") {
-            ; Rapid fire logic
-            MoveX := MoveX * 3
-            MoveY := MoveY * 3
-        } else if (SelectedAimingStyle = "Slow Fire") {
-            ; Slow fire logic
-            MoveX := MoveX * 0.3
-            MoveY := MoveY * 0.3
-        } else if (SelectedAimingStyle = "Auto Aim") {
-            ; Auto aim logic
-            MoveX := MoveX * 0.9
-            MoveY := MoveY * 0.9
-        }
+            ; Apply aiming style
+            if (SelectedAimingStyle = "Standard") {
+                ; Do nothing, use default values
+            } else if (SelectedAimingStyle = "Smooth") {
+                MoveX := MoveX / 2
+                MoveY := MoveY / 2
+            } else if (SelectedAimingStyle = "Fast") {
+                MoveX := MoveX * 2
+                MoveY := MoveY * 2
+            } else if (SelectedAimingStyle = "Precise") {
+                MoveX := MoveX / 3
+                MoveY := MoveY / 3
+            } else if (SelectedAimingStyle = "Aggressive") {
+                MoveX := MoveX * 1.5
+                MoveY := MoveY * 1.5
+            } else if (SelectedAimingStyle = "Random") {
+                Random, randX, -5, 5
+                Random, randY, -5, 5
+                MoveX := MoveX + randX
+                MoveY := MoveY + randY
+            } else if (SelectedAimingStyle = "Predictive") {
+                ; Predictive logic can be more complex, for now using a simple multiplier
+                MoveX := MoveX * 0.9
+                MoveY := MoveY * 0.9
+            } else if (SelectedAimingStyle = "Sniper") {
+                MoveX := MoveX / 5
+                MoveY := MoveY / 5
+            } else if (SelectedAimingStyle = "Spray") {
+                Random, sprayX, -10, 10
+                Random, sprayY, -10, 10
+                MoveX := MoveX + sprayX
+                MoveY := MoveY + sprayY
+            } else if (SelectedAimingStyle = "Burst") {
+                Random, burstX, -3, 3
+                Random, burstY, -3, 3
+                MoveX := MoveX + burstX
+                MoveY := MoveY + burstY
+            } else if (SelectedAimingStyle = "Steady") {
+                MoveX := MoveX * 0.8
+                MoveY := MoveY * 0.8
+            } else if (SelectedAimingStyle = "Recoil Control") {
+                MoveX := MoveX / 4
+                MoveY := MoveY / 4
+            } else if (SelectedAimingStyle = "Tracking") {
+                ; Tracking logic can be added here
+                MoveX := MoveX
+                MoveY := MoveY
+            } else if (SelectedAimingStyle = "Micro Adjustment") {
+                MoveX := MoveX / 10
+                MoveY := MoveY / 10
+            } else if (SelectedAimingStyle = "Macro Adjustment") {
+                MoveX := MoveX * 5
+                MoveY := MoveY * 5
+            } else if (SelectedAimingStyle = "Gradual") {
+                MoveX := MoveX * 0.7
+                MoveY := MoveY * 0.7
+            } else if (SelectedAimingStyle = "Sudden") {
+                MoveX := MoveX * 3
+                MoveY := MoveX * 3
+            } else if (SelectedAimingStyle = "Wave") {
+                ; Wave pattern logic
+                MoveX := MoveX + Sin(A_TickCount / 10) * 5
+                MoveY := MoveY + Cos(A_TickCount / 10) * 5
+            } else if (SelectedAimingStyle = "Zigzag") {
+                ; Zigzag pattern logic
+                MoveX := MoveX + ((A_TickCount // 20) + 2 = 0 ? 10 : -10)
+                MoveY := MoveY + ((A_TickCount // 20) + 2 = 0 ? -10 : 10)
+            } else if (SelectedAimingStyle = "Jitter") {
+                ; Jitter pattern logic
+                Random, jitterX, -10, 10
+                Random, jitterY, -10, 10
+                MoveX := MoveX + jitterX
+                MoveY := MoveY + jitterY
+            } else if (SelectedAimingStyle = "Spiral") {
+                ; Spiral pattern logic
+                MoveX := MoveX + Sin(A_TickCount / 10) * 10
+                MoveY := MoveY + Cos(A_TickCount / 10) * 10
+            } else if (SelectedAimingStyle = "Random Precise") {
+                Random, randX, -1, 1
+                Random, randY, -1, 1
+                MoveX := MoveX + randX
+                MoveY := MoveY + randY
+            } else if (SelectedAimingStyle = "Random Aggressive") {
+                Random, randX, -15, 15
+                Random, randY, -15, 15
+                MoveX := MoveX + randX
+                MoveY := MoveY + randY
+            } else if (SelectedAimingStyle = "Counter Recoil") {
+                ; Counter recoil logic
+                MoveX := MoveX - Sin(A_TickCount / 10) * 5
+                MoveY := MoveY - Cos(A_TickCount / 10) * 5
+            } else if (SelectedAimingStyle = "Drag Shot") {
+                MoveX := MoveX * 1.2
+                MoveY := MoveY * 1.2
+            } else if (SelectedAimingStyle = "Hit Scan") {
+                MoveX := MoveX * 0.5
+                MoveY := MoveY * 0.5
+            } else if (SelectedAimingStyle = "Sharp Shooter") {
+                MoveX := MoveX * 2.5
+                MoveY := MoveY * 2.5
+            } else if (SelectedAimingStyle = "Rapid Fire") {
+                ; Rapid fire logic
+                MoveX := MoveX * 3
+                MoveY := MoveY * 3
+            } else if (SelectedAimingStyle = "Slow Fire") {
+                ; Slow fire logic
+                MoveX := MoveX * 0.3
+                MoveY := MoveX * 0.3
+            } else if (SelectedAimingStyle = "Auto Aim") {
+                ; Auto aim logic
+                MoveX := MoveX * 0.9
+                MoveY := MoveY * 0.9
+            }
 
-        MoveX := MoveX / Smoothing
-        MoveY := MoveY / Smoothing
-        DllCall("mouse_event", UInt, 1, Int, MoveX, Int, MoveY, UInt, 0, UInt, 0)
+            MoveX := MoveX / Smoothing
+            MoveY := MoveY / Smoothing
+            DllCall("mouse_event", UInt, 1, Int, MoveX, Int, MoveY, UInt, 0, UInt, 0)
+        }
         if (Triggerbot = 1) {
             Click, down
         }
@@ -534,6 +541,12 @@ CheckBHop:
 if (GetKeyState("w", "P")) {
     SendInput, {Space}
 }
+return
+
+; Toggle True Color Aimbot
+ToggleTrueColorAimbot:
+Gui, Submit, NoHide
+TrueColorAimbotEnabled := TrueColorAimbot
 return
 
 ; Dual Aimbot Functionality
