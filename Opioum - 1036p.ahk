@@ -1,4 +1,4 @@
-; Initialization and Environment Setup
+﻿; Initialization and Environment Setup
 #NoEnv
 #MaxHotkeysPerInterval 127
 SendMode Input
@@ -30,14 +30,14 @@ CoordMode, Mouse, Screen
 CoordMode, Pixel, Screen
 
 ; Aim and Sensitivity Variables
-aim1 := 0x0000E6
-aim2 := 0x0000E6
+aim1 := 0xE600B3
+aim2 := 0xE600B3
 variation := 8
-searchArea := 150
-Sense := 0.15
+searchArea := 200 ; Increased search area for better detection
+Sense := 0.35 ; Increased sensitivity for faster response
 FovSense := 0.15
 TriggerSense := 5.75
-Smoothing := 4.75
+Smoothing := 3.5 ; Reduced smoothing for more accurate movements
 OSDEnabled := 1
 TrueColorAimbotEnabled := 0
 
@@ -92,15 +92,16 @@ SetGuiTheme(CurrentTheme)
 ; Custom Title Bar
 Gui, -Caption -ToolWindow -AlwaysOnTop
 Gui, Font, s11, Verdana
-Gui, Add, Text, x-120 y10 w320 h30 Center BackgroundTrans cYellow, Opioum
-Gui, Add, Text, x90 y146 w20 h20 Center BackgroundTrans cFuchsia, >>
+Gui, Add, Text, x-50 y10 w320 h30 Center BackgroundTrans cYellow, Opioum - Happy Cheating!
+Gui, Add, Text, x93 y169 w15 h20 Center BackgroundTrans cFuchsia,  >
+Gui, Add, Text, x25 y185 w60 h17 Center BackgroundTrans cFuchsia, ---------
 Gui, Add, Text, x55 y30 w20 h20 Center BackgroundTrans cLime gLeDrag,
 Gui, Add, Text, x60 y30 w20 h20 Center BackgroundTrans cFuchsia, D|
 Gui, Add, Text, x20 y30 w20 h20 Center BackgroundTrans cFuchsia gRestartScript, |R|
 Gui, Add, Text, x40 y30 w20 h20 Center BackgroundTrans cFuchsia gCloseGUI, X|
 
 ; Tabs Setup
-Gui, Add, Tab2, x10 y50 w90 h390 vMainTab BackgroundTrans, Toggles|Settings|Themes|Movement|Aimbot
+Gui, Add, Tab2, x10 y50 w90 h390 vMainTab BackgroundTrans, Welcome!|Settings|Themes|Movement|Aimbot|Toggles
 
 ; Settings Tab
 Gui, Tab, Settings
@@ -134,7 +135,6 @@ Gui, Add, Checkbox, x140 y110 w300 gToggleOSD vOSDEnabled Checked, Enable OSD
 Gui, Add, Checkbox, x140 y140 w300 gToggleBHop vBHop, BHop (45ms)
 Gui, Add, Checkbox, x140 y170 w300 gDualAimbot vDualAimbot, Dual Aimbot
 Gui, Add, Checkbox, x140 y200 w300 gToggleTrueColorAimbot vTrueColorAimbot, True Color Aimbot
-Gui, Add, Button, x140 y230 w300 gCreds, CREDITS
 
 ; Themes Tab
 Gui, Tab, Themes
@@ -142,6 +142,7 @@ Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Theme:
 Gui, Add, Text, x200 y20 w170 cYellow, Default is EngineOwning
 Gui, Add, DropDownList, x240 y50 w100 vThemeDropDown gApplyTheme, % "Dark|Light|Blue|Red|Green|Yellow|Purple|Orange|Pink|Teal|Lime|Cyan|Magenta|Silver|Maroon|Olive|Navy|Gold|Brown|Coral|Khaki|Lavender|Mint|Peach|Salmon|Sky Blue|Slate|Tan|Turquoise|Violet|Wheat|EngineOwning"
+Gui, Add, Text, x200 y90 w170 cYellow, To customize the font color, it's necessary to modify the code to adjust the default theme according to your preferences.
 
 ; Movement Tab
 Gui, Tab, Movement
@@ -149,6 +150,8 @@ Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Movement:
 Gui, Add, Text, x200 y20 w170 cYellow, Default is None
 Gui, Add, DropDownList, x240 y50 w150 vMovementOption gApplyMovementOption, % "None|Jump Only|Crouch Only|Jump & Crouch|Strafe Left|Strafe Right|Forward|Backward|Circle Left|Circle Right|Diagonal Forward Left|Diagonal Forward Right|Diagonal Backward Left|Diagonal Backward Right|Random Jump|Random Crouch|Step Left|Step Right|Step Forward|Step Backward|Rotate Left|Rotate Right|Rotate Up|Rotate Down"
+Gui, Add, Text, x200 y90 w170 cYellow, In essence, this involves instructing your aimbot to not only locate and track targets but also execute evasive maneuvers to avoid incoming fire.
+
 
 ; Aimbot Tab
 Gui, Tab, Aimbot
@@ -156,6 +159,29 @@ Gui, Font, s10, Verdana
 Gui, Add, Text, x140 y50 w100, Select Aiming Style:
 Gui, Add, Text, x200 y20 w170 cYellow, Default is Gradual
 Gui, Add, DropDownList, x240 y50 w150 vAimingStyle gApplyAimingStyle, % "Standard|Smooth|Fast|Precise|Aggressive|Random|Predictive|Sniper|Spray|Burst|Steady|Recoil Control|Tracking|Micro Adjustment|Macro Adjustment|Gradual|Sudden|Wave|Zigzag|Jitter|Spiral|Random Precise|Random Aggressive|Counter Recoil|Drag Shot|Hit Scan|Sharp Shooter|Rapid Fire|Slow Fire|Auto Aim"
+Gui, Add, Text, x200 y90 w170 cYellow, These are essential control methods for the aimbot. Some have weird names.
+
+; Welcome! Tab
+Gui, Tab, Welcome!
+Gui, Font, s30, Verdana
+Gui, Add, Text, x180 y40 w100 c0x0000E6 , Welcome!
+Gui, Font, s9, Verdana
+Gui, Add, Button, x140 y415 w300 gCreds, CREDITS
+Gui, Add, Text, x125 y100 w360 Wrap, This script provides comprehensive control over various settings to enhance your gaming experience. Below is a brief overview of each tab and its functionalities:
+
+Gui, Add, Text, x125 y140 w360 Wrap, - **Settings:** Adjust aim sensitivity, FOV sensitivity, trigger sensitivity, search area, smoothing, and aimbot hotkey. These settings fine-tune how your aimbot tracks and reacts to targets.
+
+Gui, Add, Text, x125 y180 w360 Wrap, - **Toggles:** Enable or disable features like FOV box, triggerbot, on-screen display (OSD), BHop, dual aimbot, and true color aimbot.
+
+Gui, Add, Text, x125 y220 w360 Wrap, - **Themes:** Choose from various GUI themes to personalize your interface.
+
+Gui, Add, Text, x125 y260 w360 Wrap, - **Movement:** Select movement options for your character such as jumping, crouching, strafing, and more.
+
+Gui, Add, Text, x125 y300 w360 Wrap, - **Aimbot:** Choose different aiming styles that affect how the aimbot tracks and adjusts aim.
+
+Gui, Add, Text, x125 y340 w360 Wrap, Each tab offers specific customization options tailored to enhance your gaming strategy. Feel free to explore and adjust these settings to suit your gameplay style.
+
+Gui, Add, Text, x125 y380 w360 Wrap, For detailed information on each option, refer to the tooltips provided within the script's interface.
 
 ; Main Gui Section
 Gui, Tab
@@ -432,7 +458,7 @@ While GetKeyState(AimbotHotkey, "P") {
         If (ErrorLevel = 0) {
             distance2 := Sqrt((TargetX2 - MidX)**2 + (TargetY2 - MidY)**2)
             if (distance2 < 50) {
-                dynamicSense2 := 0.55
+                dynamicSense2 := 0.65
             } else if (distance2 < 100) {
                 dynamicSense2 := 0.75
             } else {
@@ -468,7 +494,7 @@ return
 
 ; Credits Display
 Creds:
-Msgbox, 0, Opioum Made By: Khris, HackerHansen and Leplix!
+Msgbox, Opioum Made By: Khris!
 return
 
 ; Apply Functions for Settings
