@@ -1,4 +1,5 @@
-﻿; Initialization and Environment Setup
+; Initialization and Environment Setup
+#Requires AutoHotkey v1.1.33+
 #NoEnv
 #MaxHotkeysPerInterval 127
 SendMode Input
@@ -37,7 +38,7 @@ searchArea := 200 ; Increased search area for better detection
 Sense := 0.35 ; Increased sensitivity for faster response
 FovSense := 0.15
 TriggerSense := 5.75
-Smoothing := 3.5 ; Reduced smoothing for more accurate movements
+Smoothing := 2.5 ; Reduced smoothing for more accurate movements
 OSDEnabled := 1
 TrueColorAimbotEnabled := 0
 
@@ -90,113 +91,112 @@ CurrentTheme := "EngineOwning"
 SetGuiTheme(CurrentTheme)
 
 ; Custom Title Bar
-Gui, -Caption -ToolWindow -AlwaysOnTop
-Gui, Font, s11, Verdana
-Gui, Add, Text, x-50 y10 w320 h30 Center BackgroundTrans cYellow, Opioum - Happy Cheating!
-Gui, Add, Text, x93 y169 w15 h20 Center BackgroundTrans cFuchsia,  >
-Gui, Add, Text, x25 y185 w60 h17 Center BackgroundTrans cFuchsia, ---------
-Gui, Add, Text, x55 y30 w20 h20 Center BackgroundTrans cLime gLeDrag,
-Gui, Add, Text, x60 y30 w20 h20 Center BackgroundTrans cFuchsia, D|
-Gui, Add, Text, x20 y30 w20 h20 Center BackgroundTrans cFuchsia gRestartScript, |R|
-Gui, Add, Text, x40 y30 w20 h20 Center BackgroundTrans cFuchsia gCloseGUI, X|
+Gui, Main: -Caption -ToolWindow -AlwaysOnTop
+Gui, Main: Font, s11, Verdana
+Gui, Main: Add, Text, x-50 y10 w320 h30 Center BackgroundTrans cYellow, Opioum - Happy Cheating!
+Gui, Main: Add, Text, x93 y169 w15 h20 Center BackgroundTrans cFuchsia,  >
+Gui, Main: Add, Text, x25 y185 w60 h17 Center BackgroundTrans cFuchsia, ---------
+Gui, Main: Add, Text, x55 y30 w20 h20 Center BackgroundTrans cLime gLeDrag,
+Gui, Main: Add, Text, x60 y30 w20 h20 Center BackgroundTrans cFuchsia, D|
+Gui, Main: Add, Text, x20 y30 w20 h20 Center BackgroundTrans cFuchsia gRestartScript, |R|
+Gui, Main: Add, Text, x40 y30 w20 h20 Center BackgroundTrans cFuchsia gCloseGUI, X|
 
 ; Tabs Setup
-Gui, Add, Tab2, x10 y50 w90 h390 vMainTab BackgroundTrans, Welcome!|Settings|Themes|Movement|Aimbot|Toggles
+Gui, Main: Add, Tab2, x10 y50 w90 h390 vMainTab BackgroundTrans, Welcome!|Settings|Themes|Movement|Aimbot|Toggles
 
 ; Settings Tab
-Gui, Tab, Settings
-Gui, Font, s10, Verdana
-Gui, Add, Text, x120 y20 w320 h30 Center BackgroundTrans cYellow, Lower Number = Higher Value
-Gui, Add, Edit, x140 y50 w80 vSenseInput Number, %Sense%
-Gui, Add, Button, x370 y50 w50 gApplySense, Apply
-Gui, Add, Text, x140 y80 w300 vSenLabel, Aim Sensitivity: %Sense%
-Gui, Add, Edit, x140 y110 w80 vFovSenseInput Number, %FovSense%
-Gui, Add, Button, x370 y110 w50 gApplyFov, Apply
-Gui, Add, Text, x140 y140 w300 vFovLabel, Sensitivity Smoothing: %FovSense%
-Gui, Add, Edit, x140 y170 w80 vTriggerSenseInput Number, %TriggerSense%
-Gui, Add, Button, x370 y170 w50 gApplyTrigger, Apply
-Gui, Add, Text, x140 y200 w300 vTriggerLabel, Trigger Sensitivity: %TriggerSense%
-Gui, Add, Edit, x140 y230 w80 vSearchAreaInput Number, %searchArea%
-Gui, Add, Button, x370 y230 w50 gApplySearchArea, Apply
-Gui, Add, Text, x140 y260 w300 vSearchAreaLabel, Search Area: %searchArea%
-Gui, Add, Edit, x140 y290 w80 vSmoothingInput Number, %Smoothing%
-Gui, Add, Button, x370 y290 w50 gApplySmoothing, Apply
-Gui, Add, Text, x140 y320 w300 vSmoothingLabel, Aim Smoothing: %Smoothing%
-Gui, Add, Hotkey, x140 y350 w80 vAimbotHotkey, RButton
-Gui, Add, Button, x370 y350 w50 gApplyAimbotHotkey, Apply
-Gui, Add, Text, x140 y380 w300 vAimbotHotkeyLabel, Aimbot Hotkey: RButton
+Gui, Main: Tab, Settings
+Gui, Main: Font, s10, Verdana
+Gui, Main: Add, Text, x120 y20 w320 h30 Center BackgroundTrans cYellow, Lower Number = Higher Value
+Gui, Main: Add, Edit, x140 y50 w80 vSenseInput Number, %Sense%
+Gui, Main: Add, Button, x370 y50 w50 gApplySense, Apply
+Gui, Main: Add, Text, x140 y80 w300 vSenLabel, Aim Sensitivity: %Sense%
+Gui, Main: Add, Edit, x140 y110 w80 vFovSenseInput Number, %FovSense%
+Gui, Main: Add, Button, x370 y110 w50 gApplyFov, Apply
+Gui, Main: Add, Text, x140 y140 w300 vFovLabel, Sensitivity Smoothing: %FovSense%
+Gui, Main: Add, Edit, x140 y170 w80 vTriggerSenseInput Number, %TriggerSense%
+Gui, Main: Add, Button, x370 y170 w50 gApplyTrigger, Apply
+Gui, Main: Add, Text, x140 y200 w300 vTriggerLabel, Trigger Sensitivity: %TriggerSense%
+Gui, Main: Add, Edit, x140 y230 w80 vSearchAreaInput Number, %searchArea%
+Gui, Main: Add, Button, x370 y230 w50 gApplySearchArea, Apply
+Gui, Main: Add, Text, x140 y260 w300 vSearchAreaLabel, Search Area: %searchArea%
+Gui, Main: Add, Edit, x140 y290 w80 vSmoothingInput Number, %Smoothing%
+Gui, Main: Add, Button, x370 y290 w50 gApplySmoothing, Apply
+Gui, Main: Add, Text, x140 y320 w300 vSmoothingLabel, Aim Smoothing: %Smoothing%
+Gui, Main: Add, Hotkey, x140 y350 w80 vAimbotHotkey, RButton
+Gui, Main: Add, Button, x370 y350 w50 gApplyAimbotHotkey, Apply
+Gui, Main: Add, Text, x140 y380 w300 vAimbotHotkeyLabel, Aimbot Hotkey: RButton
 
 ; Toggles Tab
-Gui, Tab, Toggles
-Gui, Font, s10, Verdana
-Gui, Add, Checkbox, x140 y50 w300 gFovBox vFov, Fov Box (1036p)
-Gui, Add, Checkbox, x140 y80 w300 vTriggerbot, Triggerbot
-Gui, Add, Checkbox, x140 y110 w300 gToggleOSD vOSDEnabled Checked, Enable OSD
-Gui, Add, Checkbox, x140 y140 w300 gToggleBHop vBHop, BHop (45ms)
-Gui, Add, Checkbox, x140 y170 w300 gDualAimbot vDualAimbot, Dual Aimbot
-Gui, Add, Checkbox, x140 y200 w300 gToggleTrueColorAimbot vTrueColorAimbot, True Color Aimbot
+Gui, Main: Tab, Toggles
+Gui, Main: Font, s10, Verdana
+Gui, Main: Add, Checkbox, x140 y50 w300 gFovBox vFov, Fov Box (1036p)
+Gui, Main: Add, Checkbox, x140 y80 w300 vTriggerbot, Triggerbot
+Gui, Main: Add, Checkbox, x140 y110 w300 gToggleOSD vOSDEnabled Checked, Enable OSD
+Gui, Main: Add, Checkbox, x140 y140 w300 gToggleBHop vBHop, BHop (45ms)
+Gui, Main: Add, Checkbox, x140 y170 w300 gDualAimbot vDualAimbot, Dual Aimbot
+Gui, Main: Add, Checkbox, x140 y200 w300 gToggleTrueColorAimbot vTrueColorAimbot, True Color Aimbot
 
 ; Themes Tab
-Gui, Tab, Themes
-Gui, Font, s10, Verdana
-Gui, Add, Text, x140 y50 w100, Select Theme:
-Gui, Add, Text, x200 y20 w170 cYellow, Default is EngineOwning
-Gui, Add, DropDownList, x240 y50 w100 vThemeDropDown gApplyTheme, % "Dark|Light|Blue|Red|Green|Yellow|Purple|Orange|Pink|Teal|Lime|Cyan|Magenta|Silver|Maroon|Olive|Navy|Gold|Brown|Coral|Khaki|Lavender|Mint|Peach|Salmon|Sky Blue|Slate|Tan|Turquoise|Violet|Wheat|EngineOwning"
-Gui, Add, Text, x200 y90 w170 cYellow, To customize the font color, it's necessary to modify the code to adjust the default theme according to your preferences.
+Gui, Main: Tab, Themes
+Gui, Main: Font, s10, Verdana
+Gui, Main: Add, Text, x140 y50 w100, Select Theme:
+Gui, Main: Add, Text, x200 y20 w170 cYellow, Default is EngineOwning
+Gui, Main: Add, DropDownList, x240 y50 w100 vThemeDropDown gApplyTheme, % "Dark|Light|Blue|Red|Green|Yellow|Purple|Orange|Pink|Teal|Lime|Cyan|Magenta|Silver|Maroon|Olive|Navy|Gold|Brown|Coral|Khaki|Lavender|Mint|Peach|Salmon|Sky Blue|Slate|Tan|Turquoise|Violet|Wheat|EngineOwning"
+Gui, Main: Add, Text, x200 y90 w170 cYellow, To customize the font color, it's necessary to modify the code to adjust the default theme according to your preferences.
 
 ; Movement Tab
-Gui, Tab, Movement
-Gui, Font, s10, Verdana
-Gui, Add, Text, x140 y50 w100, Select Movement:
-Gui, Add, Text, x200 y20 w170 cYellow, Default is None
-Gui, Add, DropDownList, x240 y50 w150 vMovementOption gApplyMovementOption, % "None|Jump Only|Crouch Only|Jump & Crouch|Strafe Left|Strafe Right|Forward|Backward|Circle Left|Circle Right|Diagonal Forward Left|Diagonal Forward Right|Diagonal Backward Left|Diagonal Backward Right|Random Jump|Random Crouch|Step Left|Step Right|Step Forward|Step Backward|Rotate Left|Rotate Right|Rotate Up|Rotate Down"
-Gui, Add, Text, x200 y90 w170 cYellow, In essence, this involves instructing your aimbot to not only locate and track targets but also execute evasive maneuvers to avoid incoming fire.
-
+Gui, Main: Tab, Movement
+Gui, Main: Font, s10, Verdana
+Gui, Main: Add, Text, x140 y50 w100, Select Movement:
+Gui, Main: Add, Text, x200 y20 w170 cYellow, Default is None
+Gui, Main: Add, DropDownList, x240 y50 w150 vMovementOption gApplyMovementOption, % "None|Jump Only|Crouch Only|Jump & Crouch|Strafe Left|Strafe Right|Forward|Backward|Circle Left|Circle Right|Diagonal Forward Left|Diagonal Forward Right|Diagonal Backward Left|Diagonal Backward Right|Random Jump|Random Crouch|Step Left|Step Right|Step Forward|Step Backward|Rotate Left|Rotate Right|Rotate Up|Rotate Down"
+Gui, Main: Add, Text, x200 y90 w170 cYellow, In essence, this involves instructing your aimbot to not only locate and track targets but also execute evasive maneuvers to avoid incoming fire.
 
 ; Aimbot Tab
-Gui, Tab, Aimbot
-Gui, Font, s10, Verdana
-Gui, Add, Text, x140 y50 w100, Select Aiming Style:
-Gui, Add, Text, x200 y20 w170 cYellow, Default is Gradual
-Gui, Add, DropDownList, x240 y50 w150 vAimingStyle gApplyAimingStyle, % "Standard|Smooth|Fast|Precise|Aggressive|Random|Predictive|Sniper|Spray|Burst|Steady|Recoil Control|Tracking|Micro Adjustment|Macro Adjustment|Gradual|Sudden|Wave|Zigzag|Jitter|Spiral|Random Precise|Random Aggressive|Counter Recoil|Drag Shot|Hit Scan|Sharp Shooter|Rapid Fire|Slow Fire|Auto Aim"
-Gui, Add, Text, x200 y90 w170 cYellow, These are essential control methods for the aimbot. Some have weird names.
+Gui, Main: Tab, Aimbot
+Gui, Main: Font, s10, Verdana
+Gui, Main: Add, Text, x140 y50 w100, Select Aiming Style:
+Gui, Main: Add, Text, x200 y20 w170 cYellow, Default is Gradual
+Gui, Main: Add, DropDownList, x240 y50 w150 vAimingStyle gApplyAimingStyle, % "Standard|Smooth|Fast|Precise|Aggressive|Random|Predictive|Sniper|Spray|Burst|Steady|Recoil Control|Tracking|Micro Adjustment|Macro Adjustment|Gradual|Sudden|Wave|Zigzag|Jitter|Spiral|Random Precise|Random Aggressive|Counter Recoil|Drag Shot|Hit Scan|Sharp Shooter|Rapid Fire|Slow Fire|Auto Aim"
+Gui, Main: Add, Text, x200 y90 w170 cYellow, These are essential control methods for the aimbot. Some have weird names.
 
 ; Welcome! Tab
-Gui, Tab, Welcome!
-Gui, Font, s30, Verdana
-Gui, Add, Text, x180 y40 w100 c0x0000E6 , Welcome!
-Gui, Font, s9, Verdana
-Gui, Add, Button, x140 y415 w300 gCreds, CREDITS
-Gui, Add, Text, x125 y100 w360 Wrap, This script provides comprehensive control over various settings to enhance your gaming experience. Below is a brief overview of each tab and its functionalities:
+Gui, Main: Tab, Welcome!
+Gui, Main: Font, s30, Verdana
+Gui, Main: Add, Text, x180 y40 w100 c0x0000E6 , Welcome!
+Gui, Main: Font, s9, Verdana
+Gui, Main: Add, Button, x140 y415 w300 gCreds, CREDITS
+Gui, Main: Add, Text, x125 y100 w360 Wrap, This script provides comprehensive control over various settings to enhance your gaming experience. Below is a brief overview of each tab and its functionalities:
 
-Gui, Add, Text, x125 y140 w360 Wrap, - **Settings:** Adjust aim sensitivity, FOV sensitivity, trigger sensitivity, search area, smoothing, and aimbot hotkey. These settings fine-tune how your aimbot tracks and reacts to targets.
+Gui, Main: Add, Text, x125 y140 w360 Wrap, - **Settings:** Adjust aim sensitivity, FOV sensitivity, trigger sensitivity, search area, smoothing, and aimbot hotkey. These settings fine-tune how your aimbot tracks and reacts to targets.
 
-Gui, Add, Text, x125 y180 w360 Wrap, - **Toggles:** Enable or disable features like FOV box, triggerbot, on-screen display (OSD), BHop, dual aimbot, and true color aimbot.
+Gui, Main: Add, Text, x125 y180 w360 Wrap, - **Toggles:** Enable or disable features like FOV box, triggerbot, on-screen display (OSD), BHop, dual aimbot, and true color aimbot.
 
-Gui, Add, Text, x125 y220 w360 Wrap, - **Themes:** Choose from various GUI themes to personalize your interface.
+Gui, Main: Add, Text, x125 y220 w360 Wrap, - **Themes:** Choose from various GUI themes to personalize your interface.
 
-Gui, Add, Text, x125 y260 w360 Wrap, - **Movement:** Select movement options for your character such as jumping, crouching, strafing, and more.
+Gui, Main: Add, Text, x125 y260 w360 Wrap, - **Movement:** Select movement options for your character such as jumping, crouching, strafing, and more.
 
-Gui, Add, Text, x125 y300 w360 Wrap, - **Aimbot:** Choose different aiming styles that affect how the aimbot tracks and adjusts aim.
+Gui, Main: Add, Text, x125 y300 w360 Wrap, - **Aimbot:** Choose different aiming styles that affect how the aimbot tracks and adjusts aim.
 
-Gui, Add, Text, x125 y340 w360 Wrap, Each tab offers specific customization options tailored to enhance your gaming strategy. Feel free to explore and adjust these settings to suit your gameplay style.
+Gui, Main: Add, Text, x125 y340 w360 Wrap, Each tab offers specific customization options tailored to enhance your gaming strategy. Feel free to explore and adjust these settings to suit your gameplay style.
 
-Gui, Add, Text, x125 y380 w360 Wrap, For detailed information on each option, refer to the tooltips provided within the script's interface.
+Gui, Main: Add, Text, x125 y380 w360 Wrap, For detailed information on each option, refer to the tooltips provided within the script's interface.
 
 ; Main Gui Section
-Gui, Tab
-Gui, Show, x%FirX% y%FirY% w500 h450, Opioum
+Gui, Main: Tab
+Gui, Main: Show, x%FirX% y%FirY% w500 h450, Opioum
 WinSet, Region, 0-0 500-0 500-450 0-450 0-0 w500 h450 R40-40, Opioum
 
 ; On-Screen Display (OSD) Setup
 MyColor := 0xCB3031
 Gui OSD:+LastFound +AlwaysOnTop -Caption +ToolWindow
-Gui, OSD:Color, %MyColor%
-Gui, OSD:Font, s26, Lucida Console
-Gui, OSD:Add, Text, vMyText cYellow, Opioum
+Gui OSD:Color, %MyColor%
+Gui OSD:Font, s26, Lucida Console
+Gui OSD:Add, Text, vMyText cYellow, Opioum
 WinSet, TransColor, %MyColor% 155
 if (OSDEnabled) {
-    Gui, OSD:Show, x0 y0 NoActivate
+    Gui OSD:Show, x0 y0 NoActivate
 }
 
 ; Set Timer for FOV Box Update
@@ -211,7 +211,7 @@ return
 
 ; Aimbot Functionality
 Aimbot:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 While GetKeyState(AimbotHotkey, "P") {
     searchAreaHalf := searchArea / 2
     PixelSearch, TargetX, TargetY, MidX-searchAreaHalf, MidY-searchAreaHalf, MidX+searchAreaHalf, MidY+searchAreaHalf, aim1, variation, Fast RGB
@@ -220,7 +220,7 @@ While GetKeyState(AimbotHotkey, "P") {
             ; Directly move to the target without sensitivity adjustments
             MoveX := TargetX - MidX
             MoveY := TargetY - MidY
-            DllCall("mouse_event", UInt, 1, Int, MoveX, Int, MoveY, UInt, 0, UInt, 0)
+            DllCall("mouse_event", "UInt", 1, "Int", MoveX, "Int", MoveY, "UInt", 0, "UInt", 0)
         } else {
             distance := Sqrt((TargetX - MidX)**2 + (TargetY - MidY)**2)
             ; Dynamic Sensitivity Calculation
@@ -235,222 +235,219 @@ While GetKeyState(AimbotHotkey, "P") {
             MoveY := (TargetY - MidY) / dynamicSense
 
             ; Apply aiming style
-            if (SelectedAimingStyle = "Standard") {
-                ; Do nothing, use default values
-            } else if (SelectedAimingStyle = "Smooth") {
-                MoveX := MoveX / 2
-                MoveY := MoveY / 2
-            } else if (SelectedAimingStyle = "Fast") {
-                MoveX := MoveX * 2
-                MoveY := MoveY * 2
-            } else if (SelectedAimingStyle = "Precise") {
-                MoveX := MoveX / 3
-                MoveY := MoveY / 3
-            } else if (SelectedAimingStyle = "Aggressive") {
-                MoveX := MoveX * 1.5
-                MoveY := MoveY * 1.5
-            } else if (SelectedAimingStyle = "Random") {
-                Random, randX, -5, 5
-                Random, randY, -5, 5
-                MoveX := MoveX + randX
-                MoveY := MoveY + randY
-            } else if (SelectedAimingStyle = "Predictive") {
-                ; Predictive logic can be more complex, for now using a simple multiplier
-                MoveX := MoveX * 0.9
-                MoveY := MoveY * 0.9
-            } else if (SelectedAimingStyle = "Sniper") {
-                MoveX := MoveX / 5
-                MoveY := MoveY / 5
-            } else if (SelectedAimingStyle = "Spray") {
-                Random, sprayX, -10, 10
-                Random, sprayY, -10, 10
-                MoveX := MoveX + sprayX
-                MoveY := MoveY + sprayY
-            } else if (SelectedAimingStyle = "Burst") {
-                Random, burstX, -3, 3
-                Random, burstY, -3, 3
-                MoveX := MoveX + burstX
-                MoveY := MoveY + burstY
-            } else if (SelectedAimingStyle = "Steady") {
-                MoveX := MoveX * 0.8
-                MoveY := MoveY * 0.8
-            } else if (SelectedAimingStyle = "Recoil Control") {
-                MoveX := MoveX / 4
-                MoveY := MoveY / 4
-            } else if (SelectedAimingStyle = "Tracking") {
-                ; Tracking logic can be added here
-                MoveX := MoveX
-                MoveY := MoveY
-            } else if (SelectedAimingStyle = "Micro Adjustment") {
-                MoveX := MoveX / 10
-                MoveY := MoveY / 10
-            } else if (SelectedAimingStyle = "Macro Adjustment") {
-                MoveX := MoveX * 5
-                MoveY := MoveY * 5
-            } else if (SelectedAimingStyle = "Gradual") {
-                MoveX := MoveX * 0.7
-                MoveY := MoveY * 0.7
-            } else if (SelectedAimingStyle = "Sudden") {
-                MoveX := MoveX * 3
-                MoveY := MoveX * 3
-            } else if (SelectedAimingStyle = "Wave") {
-                ; Wave pattern logic
-                MoveX := MoveX + Sin(A_TickCount / 10) * 5
-                MoveY := MoveY + Cos(A_TickCount / 10) * 5
-            } else if (SelectedAimingStyle = "Zigzag") {
-                ; Zigzag pattern logic
-                MoveX := MoveX + ((A_TickCount // 20) + 2 = 0 ? 10 : -10)
-                MoveY := MoveY + ((A_TickCount // 20) + 2 = 0 ? -10 : 10)
-            } else if (SelectedAimingStyle = "Jitter") {
-                ; Jitter pattern logic
-                Random, jitterX, -10, 10
-                Random, jitterY, -10, 10
-                MoveX := MoveX + jitterX
-                MoveY := MoveY + jitterY
-            } else if (SelectedAimingStyle = "Spiral") {
-                ; Spiral pattern logic
-                MoveX := MoveX + Sin(A_TickCount / 10) * 10
-                MoveY := MoveY + Cos(A_TickCount / 10) * 10
-            } else if (SelectedAimingStyle = "Random Precise") {
-                Random, randX, -1, 1
-                Random, randY, -1, 1
-                MoveX := MoveX + randX
-                MoveY := MoveY + randY
-            } else if (SelectedAimingStyle = "Random Aggressive") {
-                Random, randX, -15, 15
-                Random, randY, -15, 15
-                MoveX := MoveX + randX
-                MoveY := MoveY + randY
-            } else if (SelectedAimingStyle = "Counter Recoil") {
-                ; Counter recoil logic
-                MoveX := MoveX - Sin(A_TickCount / 10) * 5
-                MoveY := MoveY - Cos(A_TickCount / 10) * 5
-            } else if (SelectedAimingStyle = "Drag Shot") {
-                MoveX := MoveX * 1.2
-                MoveY := MoveY * 1.2
-            } else if (SelectedAimingStyle = "Hit Scan") {
-                MoveX := MoveX * 0.5
-                MoveY := MoveY * 0.5
-            } else if (SelectedAimingStyle = "Sharp Shooter") {
-                MoveX := MoveX * 2.5
-                MoveY := MoveY * 2.5
-            } else if (SelectedAimingStyle = "Rapid Fire") {
-                ; Rapid fire logic
-                MoveX := MoveX * 3
-                MoveY := MoveY * 3
-            } else if (SelectedAimingStyle = "Slow Fire") {
-                ; Slow fire logic
-                MoveX := MoveX * 0.3
-                MoveY := MoveX * 0.3
-            } else if (SelectedAimingStyle = "Auto Aim") {
-                ; Auto aim logic
-                MoveX := MoveX * 0.9
-                MoveY := MoveY * 0.9
+            Switch SelectedAimingStyle
+            {
+                Case "Standard":
+                    ; Do nothing, use default values
+                Case "Smooth":
+                    MoveX := MoveX / 2
+                    MoveY := MoveY / 2
+                Case "Fast":
+                    MoveX := MoveX * 2
+                    MoveY := MoveY * 2
+                Case "Precise":
+                    MoveX := MoveX / 3
+                    MoveY := MoveY / 3
+                Case "Aggressive":
+                    MoveX := MoveX * 1.5
+                    MoveY := MoveY * 1.5
+                Case "Random":
+                    Random, randX, -5, 5
+                    Random, randY, -5, 5
+                    MoveX := MoveX + randX
+                    MoveY := MoveY + randY
+                Case "Predictive":
+                    MoveX := MoveX * 0.9
+                    MoveY := MoveY * 0.9
+                Case "Sniper":
+                    MoveX := MoveX / 5
+                    MoveY := MoveY / 5
+                Case "Spray":
+                    Random, sprayX, -10, 10
+                    Random, sprayY, -10, 10
+                    MoveX := MoveX + sprayX
+                    MoveY := MoveY + sprayY
+                Case "Burst":
+                    Random, burstX, -3, 3
+                    Random, burstY, -3, 3
+                    MoveX := MoveX + burstX
+                    MoveY := MoveY + burstY
+                Case "Steady":
+                    MoveX := MoveX * 0.8
+                    MoveY := MoveY * 0.8
+                Case "Recoil Control":
+                    MoveX := MoveX / 4
+                    MoveY := MoveY / 4
+                Case "Tracking":
+                    ; Tracking logic can be added here
+                    MoveX := MoveX
+                    MoveY := MoveY
+                Case "Micro Adjustment":
+                    MoveX := MoveX / 10
+                    MoveY := MoveY / 10
+                Case "Macro Adjustment":
+                    MoveX := MoveX * 5
+                    MoveY := MoveY * 5
+                Case "Gradual":
+                    MoveX := MoveX * 0.7
+                    MoveY := MoveY * 0.7
+                Case "Sudden":
+                    MoveX := MoveX * 3
+                    MoveY := MoveX * 3
+                Case "Wave":
+                    MoveX := MoveX + Sin(A_TickCount / 10) * 5
+                    MoveY := MoveY + Cos(A_TickCount / 10) * 5
+                Case "Zigzag":
+                    MoveX := MoveX + ((A_TickCount // 20) + 2 = 0 ? 10 : -10)
+                    MoveY := MoveY + ((A_TickCount // 20) + 2 = 0 ? -10 : 10)
+                Case "Jitter":
+                    Random, jitterX, -10, 10
+                    Random, jitterY, -10, 10
+                    MoveX := MoveX + jitterX
+                    MoveY := MoveY + jitterY
+                Case "Spiral":
+                    MoveX := MoveX + Sin(A_TickCount / 10) * 10
+                    MoveY := MoveY + Cos(A_TickCount / 10) * 10
+                Case "Random Precise":
+                    Random, randX, -1, 1
+                    Random, randY, -1, 1
+                    MoveX := MoveX + randX
+                    MoveY := MoveY + randY
+                Case "Random Aggressive":
+                    Random, randX, -15, 15
+                    Random, randY, -15, 15
+                    MoveX := MoveX + randX
+                    MoveY := MoveY + randY
+                Case "Counter Recoil":
+                    MoveX := MoveX - Sin(A_TickCount / 10) * 5
+                    MoveY := MoveY - Cos(A_TickCount / 10) * 5
+                Case "Drag Shot":
+                    MoveX := MoveX * 1.2
+                    MoveY := MoveY * 1.2
+                Case "Hit Scan":
+                    MoveX := MoveX * 0.5
+                    MoveY := MoveY * 0.5
+                Case "Sharp Shooter":
+                    MoveX := MoveX * 2.5
+                    MoveY := MoveY * 2.5
+                Case "Rapid Fire":
+                    MoveX := MoveX * 3
+                    MoveY := MoveY * 3
+                Case "Slow Fire":
+                    MoveX := MoveX * 0.3
+                    MoveY := MoveX * 0.3
+                Case "Auto Aim":
+                    MoveX := MoveX * 0.9
+                    MoveY := MoveY * 0.9
             }
 
             MoveX := MoveX / Smoothing
             MoveY := MoveY / Smoothing
-            DllCall("mouse_event", UInt, 1, Int, MoveX, Int, MoveY, UInt, 0, UInt, 0)
+            DllCall("mouse_event", "UInt", 1, "Int", MoveX, "Int", MoveY, "UInt", 0, "UInt", 0)
         }
         if (Triggerbot = 1) {
             Click, down
         }
-        if (SelectedMovementOption = "Jump Only") {
-            Sleep, 20
-            Send, {Space}
-        } else if (SelectedMovementOption = "Crouch Only") {
-            Sleep, 20
-            Send, {C}
-        } else if (SelectedMovementOption = "Jump & Crouch") {
-            Send, {Space}
-            Sleep, 85
-            Send, {C}
-        } else if (SelectedMovementOption = "Strafe Left") {
-            Send, {A}
-        } else if (SelectedMovementOption = "Strafe Right") {
-            Send, {D}
-        } else if (SelectedMovementOption = "Forward") {
-            Send, {W}
-        } else if (SelectedMovementOption = "Backward") {
-            Send, {S}
-        } else if (SelectedMovementOption = "Circle Left") {
-            Send, {A down}
-            Sleep, 100
-            Send, {W down}
-            Sleep, 100
-            Send, {A up}
-            Sleep, 100
-            Send, {W up}
-        } else if (SelectedMovementOption = "Circle Right") {
-            Send, {D down}
-            Sleep, 100
-            Send, {W down}
-            Sleep, 100
-            Send, {D up}
-            Sleep, 100
-            Send, {W up}
-        } else if (SelectedMovementOption = "Diagonal Forward Left") {
-            Send, {W down}
-            Sleep, 20
-            Send, {A down}
-            Sleep, 20
-            Send, {W up}
-            Send, {A up}
-        } else if (SelectedMovementOption = "Diagonal Forward Right") {
-            Send, {W down}
-            Sleep, 20
-            Send, {D down}
-            Sleep, 20
-            Send, {W up}
-            Send, {D up}
-        } else if (SelectedMovementOption = "Diagonal Backward Left") {
-            Send, {S down}
-            Sleep, 20
-            Send, {A down}
-            Sleep, 20
-            Send, {S up}
-            Send, {A up}
-        } else if (SelectedMovementOption = "Diagonal Backward Right") {
-            Send, {S down}
-            Sleep, 20
-            Send, {D down}
-            Sleep, 20
-            Send, {S up}
-            Send, {D up}
-        } else if (SelectedMovementOption = "Random Jump") {
-            Random, randJump, 1, 100
-            if (randJump > 50) {
+        
+        ; Movement options
+        Switch SelectedMovementOption
+        {
+            Case "Jump Only":
+                Sleep, 20
                 Send, {Space}
-            }
-        } else if (SelectedMovementOption = "Random Crouch") {
-            Random, randCrouch, 1, 100
-            if (randCrouch > 50) {
+            Case "Crouch Only":
+                Sleep, 20
                 Send, {C}
-            }
-        } else if (SelectedMovementOption = "Step Left") {
-            Send, {A}
-            Sleep, 50
-            Send, {A}
-        } else if (SelectedMovementOption = "Step Right") {
-            Send, {D}
-            Sleep, 50
-            Send, {D}
-        } else if (SelectedMovementOption = "Step Forward") {
-            Send, {W}
-            Sleep, 50
-            Send, {W}
-        } else if (SelectedMovementOption = "Step Backward") {
-            Send, {S}
-            Sleep, 50
-            Send, {S}
-        } else if (SelectedMovementOption = "Rotate Left") {
-            DllCall("mouse_event", UInt, 1, Int, -10, Int, 0, UInt, 0, UInt, 0)
-        } else if (SelectedMovementOption = "Rotate Right") {
-            DllCall("mouse_event", UInt, 1, Int, 10, Int, 0, UInt, 0, UInt, 0)
-        } else if (SelectedMovementOption = "Rotate Up") {
-            DllCall("mouse_event", UInt, 1, Int, 0, Int, -10, UInt, 0, UInt, 0)
-        } else if (SelectedMovementOption = "Rotate Down") {
-            DllCall("mouse_event", UInt, 1, Int, 0, Int, 10, UInt, 0, UInt, 0)
+            Case "Jump & Crouch":
+                Send, {Space}
+                Sleep, 85
+                Send, {C}
+            Case "Strafe Left":
+                Send, {A}
+            Case "Strafe Right":
+                Send, {D}
+            Case "Forward":
+                Send, {W}
+            Case "Backward":
+                Send, {S}
+            Case "Circle Left":
+                Send, {A down}
+                Sleep, 100
+                Send, {W down}
+                Sleep, 100
+                Send, {A up}
+                Sleep, 100
+                Send, {W up}
+            Case "Circle Right":
+                Send, {D down}
+                Sleep, 100
+                Send, {W down}
+                Sleep, 100
+                Send, {D up}
+                Sleep, 100
+                Send, {W up}
+            Case "Diagonal Forward Left":
+                Send, {W down}
+                Sleep, 20
+                Send, {A down}
+                Sleep, 20
+                Send, {W up}
+                Send, {A up}
+            Case "Diagonal Forward Right":
+                Send, {W down}
+                Sleep, 20
+                Send, {D down}
+                Sleep, 20
+                Send, {W up}
+                Send, {D up}
+            Case "Diagonal Backward Left":
+                Send, {S down}
+                Sleep, 20
+                Send, {A down}
+                Sleep, 20
+                Send, {S up}
+                Send, {A up}
+            Case "Diagonal Backward Right":
+                Send, {S down}
+                Sleep, 20
+                Send, {D down}
+                Sleep, 20
+                Send, {S up}
+                Send, {D up}
+            Case "Random Jump":
+                Random, randJump, 1, 100
+                if (randJump > 50) {
+                    Send, {Space}
+                }
+            Case "Random Crouch":
+                Random, randCrouch, 1, 100
+                if (randCrouch > 50) {
+                    Send, {C}
+                }
+            Case "Step Left":
+                Send, {A}
+                Sleep, 50
+                Send, {A}
+            Case "Step Right":
+                Send, {D}
+                Sleep, 50
+                Send, {D}
+            Case "Step Forward":
+                Send, {W}
+                Sleep, 50
+                Send, {W}
+            Case "Step Backward":
+                Send, {S}
+                Sleep, 50
+                Send, {S}
+            Case "Rotate Left":
+                DllCall("mouse_event", "UInt", 1, "Int", -10, "Int", 0, "UInt", 0, "UInt", 0)
+            Case "Rotate Right":
+                DllCall("mouse_event", "UInt", 1, "Int", 10, "Int", 0, "UInt", 0, "UInt", 0)
+            Case "Rotate Up":
+                DllCall("mouse_event", "UInt", 1, "Int", 0, "Int", -10, "UInt", 0, "UInt", 0)
+            Case "Rotate Down":
+                DllCall("mouse_event", "UInt", 1, "Int", 0, "Int", 10, "UInt", 0, "UInt", 0)
         }
     }
     if (DualAimbot = 1) {
@@ -468,7 +465,7 @@ While GetKeyState(AimbotHotkey, "P") {
             MoveY2 := (TargetY2 - MidY) / dynamicSense2
             MoveX2 := MoveX2 / Smoothing
             MoveY2 := MoveY2 / Smoothing
-            DllCall("mouse_event", UInt, 1, Int, MoveX2, Int, MoveY2, UInt, 0, UInt, 0)
+            DllCall("mouse_event", "UInt", 1, "Int", MoveX2, "Int", MoveY2, "UInt", 0, "UInt", 0)
         }
     }
 }
@@ -482,13 +479,13 @@ return
 
 ; Apply Movement Option
 ApplyMovementOption:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 SelectedMovementOption := MovementOption
 return
 
 ; Apply Aiming Style
 ApplyAimingStyle:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 SelectedAimingStyle := AimingStyle
 return
 
@@ -499,63 +496,63 @@ return
 
 ; Apply Functions for Settings
 ApplySense:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 Sense := SenseInput
-GuiControl,, SenLabel, Aim Sensitivity: %Sense%
+GuiControl, Main:, SenLabel, Aim Sensitivity: %Sense%
 return
 
 ApplyFov:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 FovSense := FovSenseInput
-GuiControl,, FovLabel, Sensitivity Smoothing: %FovSense%
+GuiControl, Main:, FovLabel, Sensitivity Smoothing: %FovSense%
 return
 
 ApplyTrigger:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 TriggerSense := TriggerSenseInput
-GuiControl,, TriggerLabel, Trigger Sensitivity: %TriggerSense%
+GuiControl, Main:, TriggerLabel, Trigger Sensitivity: %TriggerSense%
 return
 
 ApplySearchArea:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 searchArea := SearchAreaInput
-GuiControl,, SearchAreaLabel, Search Area: %searchArea%
+GuiControl, Main:, SearchAreaLabel, Search Area: %searchArea%
 return
 
 ApplySmoothing:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 Smoothing := SmoothingInput
-GuiControl,, SmoothingLabel, Aim Smoothing: %Smoothing%
+GuiControl, Main:, SmoothingLabel, Aim Smoothing: %Smoothing%
 return
 
 ApplyAimbotHotkey:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 Hotkey, %AimbotHotkey%, Aimbot, Off
 Hotkey, %AimbotHotkey% Up, AimbotUp, Off
 Hotkey, %AimbotHotkey%, Aimbot, On
 Hotkey, %AimbotHotkey% Up, AimbotUp, On
-GuiControl,, AimbotHotkeyLabel, Aimbot Hotkey: %AimbotHotkey%
+GuiControl, Main:, AimbotHotkeyLabel, Aimbot Hotkey: %AimbotHotkey%
 return
 
 ; Apply Theme Function
 ApplyTheme:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 CurrentTheme := ThemeDropDown
 SetGuiTheme(CurrentTheme)
 return
 
 ; Toggle OSD Display
 ToggleOSD:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 if (OSDEnabled) {
-    Gui, OSD:Show, x0 y0 NoActivate
+    Gui OSD:Show, x0 y0 NoActivate
 } else {
-    Gui, OSD:Hide
+    Gui OSD:Hide
 }
 return
 
 ToggleBHop:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 if (BHop == 1) {
     SetTimer, CheckBHop, 45
 } else {
@@ -571,13 +568,13 @@ return
 
 ; Toggle True Color Aimbot
 ToggleTrueColorAimbot:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 TrueColorAimbotEnabled := TrueColorAimbot
 return
 
 ; Dual Aimbot Functionality
 DualAimbot:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 if (DualAimbot == 1) {
     ; Enable dual aimbot functionality
 } else {
@@ -601,7 +598,7 @@ return
 
 ; FOV Box Functions
 FovBox:
-Gui, Submit, NoHide
+Gui, Main: Submit, NoHide
 if (Fov == 1) {
     CreateBox("01FF01")
 } else {
@@ -666,6 +663,6 @@ RemoveBox() {
 ; Set GUI Theme
 SetGuiTheme(Theme) {
     global GuiThemes
-    Gui, Font, % GuiThemes[Theme].FontColor
-    Gui, Color, % GuiThemes[Theme].Color
+    Gui, Main: Font, % GuiThemes[Theme].FontColor
+    Gui, Main: Color, % GuiThemes[Theme].Color
 }
